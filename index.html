@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>repo-dl</title>
+    <style>
+        body { font-family: sans-serif; background: #0d1117; color: #c9d1d9; padding: 40px; text-align: center; }
+        input { padding: 8px; margin: 5px; background: #161b22; border: 1px solid #30363d; color: #fff; border-radius: 4px; }
+        button { padding: 8px 15px; background: #238636; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        #status { margin-top: 15px; color: #8b949e; }
+        msg { margin-top: 15px; color: #8b949e; }
+    </style>
+</head>
+<body>
+
+    <h2>repo-dl</h2>
+    <input type="text" id="user" placeholder="user">
+    <input type="text" id="repo" placeholder="repository">
+    <input type="text" id="branch" placeholder="branch" value="main">
+    <button onclick="download()">download</button>
+    <div id="status">ready for download</div>
+    <br>
+    <div id="msg">(trying to download a missing repo does nothing)</div>
+
+<script>
+function download() {
+    const user = document.getElementById('user').value.trim();
+    const repo = document.getElementById('repo').value.trim();
+    const branch = document.getElementById('branch').value.trim() || 'main';
+    const status = document.getElementById('status');
+
+    if (!user || !repo) {
+        status.innerText = 'fill all fields!';
+        return;
+    }
+
+    const url = `https://github.com/${user}/${repo}/archive/refs/heads/${branch}.zip`;
+    
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = url;
+    document.body.appendChild(iframe);
+    
+    status.innerText = 'download started';
+
+    setTimeout(() => {
+        document.body.removeChild(iframe);
+        status.innerText = 'ready for next download';
+    }, 1575);
+}
+</script>
+
+</body>
+</html>
